@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Rockyt - The AI Ad Co-pilot</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+      body {
+        font-family: 'Helvetica World', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+        background-color: #000000;
+        color: #FFFFFF;
+      }
+      h1, h2, h3, h4, h5, h6, .serif-font, .font-serif, .font-sans {
+        font-family: 'Helvetica World', 'Helvetica Neue', Helvetica, Arial, sans-serif !important;
+      }
+      .scribble-anim {
+        stroke-dasharray: 1000;
+        stroke-dashoffset: 1000;
+        animation: dash 2s ease-out forwards;
+      }
+      @keyframes dash {
+        to { stroke-dashoffset: 0; }
+      }
+      .card-shadow {
+        box-shadow: 8px 8px 0px 0px rgba(0, 0, 0, 1);
+      }
+      .card-shadow-white {
+        box-shadow: 8px 8px 0px 0px rgba(255, 255, 255, 0.2);
+      }
+      .card-shadow-hover:hover {
+        transform: translate(-4px, -4px);
+        box-shadow: 12px 12px 0px 0px #C7F6E4;
+      }
+      .celadon-shadow {
+        box-shadow: 4px 4px 0px 0px #C7F6E4;
+      }
+      .input-minimal {
+        background: transparent;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+        transition: all 0.3s ease;
+        color: #000000;
+      }
+      .input-minimal:focus {
+        border-bottom-color: #000000;
+        outline: none;
+      }
+      /* Logic Classes */
+      .section-active {
+        display: block !important;
+        animation: fadeIn 0.4s ease-out;
+      }
+      .section-hidden {
+        display: none !important;
+      }
+      @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(10px); }
+        to { opacity: 1; transform: translateY(0); }
+      }
+      .animate-float {
+        animation: float 6s ease-in-out infinite;
+      }
+      @keyframes float {
+        0% { transform: translateY(0px); }
+        50% { transform: translateY(-20px); }
+        100% { transform: translateY(0px); }
+      }
+      .glass-panel {
+        background: rgba(255, 255, 255, 0.03);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        transition: all 0.3s ease;
+      }
+      .glass-panel:hover {
+        background: rgba(255, 255, 255, 0.05);
+        border-color: rgba(199, 246, 228, 0.5);
+        box-shadow: 0 0 30px rgba(199,246,228,0.1);
+        transform: translateY(-5px);
+      }
+      /* Custom utility for highlight text */
+      .text-rockyt-green {
+        color: #C7F6E4;
+      }
+      .bg-rockyt-green {
+        background-color: #C7F6E4;
+      }
+
+      /* Partner Carousel Styles */
+      .partners-carousel {
+        width: 100%;
+        overflow: hidden;
+        padding: 30px 0;
+        background: transparent;
+        position: relative;
+      }
+
+      .carousel-track {
+        display: flex;
+        align-items: center;
+        gap: 60px;
+        width: fit-content;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+      }
+
+      .carousel-track.loaded {
+        opacity: 1;
+        animation: scroll 20s linear infinite;
+      }
+
+      .carousel-track:hover {
+        animation-play-state: paused;
+      }
+
+      .partner-logo {
+        flex-shrink: 0;
+        width: 140px;
+        height: 90px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: transparent;
+        border-radius: 8px;
+        padding: 12px;
+        transition: transform 0.25s ease;
+      }
+
+      .partner-logo:hover {
+        transform: translateY(-4px) scale(1.04);
+      }
+
+      .partner-logo img {
+        max-width: 100%;
+        max-height: 100%;
+        object-fit: contain;
+        filter: grayscale(100%);
+        transition: filter 0.25s ease, transform 0.25s ease;
+        -webkit-user-drag: none;
+        user-drag: none;
+      }
+      .partner-logo:hover img { filter: grayscale(0%); transform: scale(1.02); }
+
+      @keyframes scroll {
+        0%   { transform: translateX(0); }
+        100% { transform: translateX(-50%); }
+      }
+
+      @media (max-width: 768px) {
+        .partner-logo { width: 100px; height: 60px; padding: 8px; }
+        .carousel-track { gap: 30px; }
+        .carousel-track.loaded { animation-duration: 18s; }
+      }
+
+      /* 3D Gallery / Marquee Styles */
+      .gallery-tilt-container {
+        transform: rotate(-2deg) scale(1.05);
+        width: 100%;
+        overflow: hidden;
+        padding: 40px 0;
+      }
+      .gallery-track-3d {
+        display: flex;
+        gap: 24px;
+        width: max-content;
+        animation: scrollGallery 40s linear infinite;
+      }
+      .gallery-track-3d:hover {
+        animation-play-state: paused;
+      }
+      .gallery-card-placeholder {
+        width: 260px;
+        height: 360px;
+        background: #111111;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 16px;
+        flex-shrink: 0;
+        position: relative;
+        overflow: hidden;
+        transition: all 0.3s ease;
+      }
+      .gallery-card-placeholder:hover {
+        transform: translateY(-10px);
+        border-color: #C7F6E4;
+        box-shadow: 0 10px 30px -10px rgba(199, 246, 228, 0.2);
+        z-index: 10;
+      }
+      @keyframes scrollGallery {
+        0% { transform: translateX(0); }
+        100% { transform: translateX(-50%); }
+      }
+    </style>
+  <script type="importmap">
+{
+  "imports": {
+    "react/": "https://esm.sh/react@^19.2.3/",
+    "react": "https://esm.sh/react@^19.2.3",
+    "react-dom/": "https://esm.sh/react-dom@^19.2.3/",
+    "lucide-react": "https://esm.sh/lucide-react@^0.562.0",
+    "@supabase/supabase-js": "https://esm.sh/@supabase/supabase-js@2"
+  }
+}
+</script>
+</head>
+  <body class="antialiased selection:bg-[#C7F6E4] selection:text-[#000000]">
+    <div id="root"></div>
+  </body>
+</html>
